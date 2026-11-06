@@ -1,0 +1,12 @@
+# Mysuru RoadWatch Dataset Configuration
+path: D:/main project/mysuru-roadwatch/data/dataset
+train: images/train
+val: images/val
+
+names:
+  0: pothole
+  1: pothole_cluster
+  2: crack
+  3: alligator_crack
+  4: screen_recapture
+  5: other_device_screen

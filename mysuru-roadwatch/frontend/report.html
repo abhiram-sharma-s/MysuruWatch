@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track Report Status | Mysuru RoadWatch</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css?v=3.5" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <a class="brand" href="index.html">
+            <div class="brand-mark">
+              <img src="assets/images/app_icon.png" alt="RoadWatch Icon" class="brand-logo-img" />
+            </div>
+            <div class="brand-text">
+              <h2>RoadWatch</h2>
+              <p>Mysuru City</p>
+            </div>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <span class="nav-label">Navigation</span>
+          <a class="nav-item" href="index.html" title="User Dashboard">
+            <span class="icon">🏠</span>
+            <span>User Dashboard</span>
+          </a>
+          <a class="nav-item" href="user.html" title="Report Road Issue">
+            <span class="icon">📷</span>
+            <span>Report Road Issue</span>
+          </a>
+          <a class="nav-item" href="authority.html" title="Authority Panel">
+            <span class="icon">🏛️</span>
+            <span>Authority Panel</span>
+          </a>
+          <a class="nav-item active" href="report.html" title="Track Report">
+            <span class="icon">🔍</span>
+            <span>Track Report</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="city-tag">
+            <div class="indicator"></div>
+            <span id="backendStatusPill">Mysuru RoadWatch Online</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div class="topbar-left-group">
+            <button type="button" class="topbar-menu-btn" id="topbarMenuBtn" title="Toggle Navigation Menu" aria-label="Toggle Navigation Menu">
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+            </button>
+            <div class="topbar-header">
+              <p class="eyebrow">Citizen Transparency</p>
+              <h1>Track Road Condition Report</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <a href="user.html" class="btn btn-amber">
+              <span>📷</span> New Report
+            </a>
+          </div>
+        </header>
+
+        <!-- Search Bar -->
+        <section class="card" style="padding: 20px 24px;">
+          <form id="trackSearchForm" style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 260px;">
+              <input type="text" id="trackReportIdInput" class="form-input" placeholder="Enter Report ID (e.g. RW-001, RW-002)..." style="font-size: 1rem; padding: 12px 16px;" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">
+              <span>🔍</span> Track Status
+            </button>
+          </form>
+        </section>
+
+        <!-- Report Status Result Container -->
+        <div id="trackResultContainer" style="display: none;">
+          <section class="card" style="border-top: 4px solid var(--primary);">
+            <div class="card-header">
+              <div>
+                <span class="badge" id="trackStatusBadge" style="margin-bottom: 6px; font-size: 0.85rem;">Status: New</span>
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);" id="trackReportHeading">
+                  Report RW-001 Details
+                </h2>
+                <p class="card-subtitle" id="trackDateTimeSub">—</p>
+              </div>
+              <div id="trackMapsBtnWrapper"></div>
+            </div>
+
+            <!-- Status Progress Timeline -->
+            <div style="margin: 24px 0; background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px;">
+              <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 14px;">
+                Repair Lifecycle Timeline:
+              </div>
+              <div style="display: flex; justify-content: space-between; position: relative; gap: 10px;">
+                <div class="timeline-step" id="stepNew" style="flex: 1; text-align: center;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+                  <strong style="font-size: 0.82rem; display: block;">New</strong>
+                  <small style="color: var(--text-muted);">Logged</small>
+                </div>
+                <div class="timeline-step" id="stepVerified" style="flex: 1; text-align: center;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #64748b; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                  <strong style="font-size: 0.82rem; display: block;">Verified</strong>
+                  <small style="color: var(--text-muted);">Assessed</small>
+                </div>
+                <div class="timeline-step" id="stepProgress" style="flex: 1; text-align: center;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #64748b; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+                  <strong style="font-size: 0.82rem; display: block;">In Progress</strong>
+                  <small style="color: var(--text-muted);">Crew Dispatched</small>
+                </div>
+                <div class="timeline-step" id="stepResolved" style="flex: 1; text-align: center;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #64748b; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-weight: 700;">4</div>
+                  <strong style="font-size: 0.82rem; display: block;">Resolved</strong>
+                  <small style="color: var(--text-muted);">Asphalt Restored</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 14px;">
+              <div>
+                <div style="border-radius: var(--radius-md); overflow: hidden; background: #0f172a; border: 1px solid var(--border-color); text-align: center;">
+                  <img id="trackImage" src="assets/images/sample_pothole_road.jpg" style="max-height: 280px; width: 100%; object-fit: contain;" alt="Road evidence" />
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px;">
+                  <div style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Road Condition & Severity:</div>
+                  <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                    <strong id="trackCondition" style="font-size: 1.15rem;">Pothole</strong>
+                    <span id="trackSeverity"></span>
+                    <span id="trackConfidence" style="font-weight: 700; color: #2563eb;">94% Confidence</span>
+                  </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px;">
+                  <div style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Location:</div>
+                  <strong id="trackLocation" style="font-size: 0.95rem; display: block; margin-top: 2px;">Sayyaji Rao Road, Mysuru</strong>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px;">
+                  <div style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Problem Description:</div>
+                  <p id="trackDescription" style="margin-top: 4px; font-size: 0.88rem; color: #334155;">—</p>
+                </div>
+
+                <div id="trackAuthorityNotesBox" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); padding: 14px;">
+                  <div style="font-size: 0.74rem; font-weight: 700; color: #1e40af; text-transform: uppercase;">Authority Update:</div>
+                  <p id="trackAuthorityNotes" style="margin-top: 4px; font-size: 0.88rem; color: #1e3a8a;">Awaiting initial inspection.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Recently Submitted Reports History -->
+        <section class="card" style="margin-top: 20px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Your Recently Submitted Reports</h3>
+              <p class="card-subtitle">Reports logged from this device</p>
+            </div>
+          </div>
+          <div id="myRecentReportsList" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Loaded dynamically from localStorage -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js?v=3.3"></script>
+    <script src="js/main.js?v=3.3"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Check URL parameters (e.g. ?id=RW-001)
+        const params = new URLSearchParams(window.location.search);
+        const queryId = params.get('id');
+        if (queryId) {
+          document.getElementById('trackReportIdInput').value = queryId;
+          fetchAndDisplayReport(queryId);
+        }
+
+        // Search form submit
+        document.getElementById('trackSearchForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const rid = document.getElementById('trackReportIdInput').value.trim();
+          if (rid) fetchAndDisplayReport(rid);
+        });
+
+        // Load local history
+        renderLocalHistory();
+      });
+
+      async function fetchAndDisplayReport(reportId) {
+        try {
+          const report = await window.roadWatchApi.getReportById(reportId);
+          renderTrackDetails(report);
+        } catch (err) {
+          console.warn('Track error:', err);
+          // Check local storage
+          const localList = getLocalReportHistory();
+          const match = localList.find(r => r.report_id.toUpperCase() === reportId.toUpperCase());
+          if (match) {
+            renderTrackDetails(match);
+            showToast(`Report ${reportId} loaded from local device cache.`, 'info');
+          } else {
+            showToast(`Report ID '${reportId}' not found. Please verify the ID.`, 'error');
+          }
+        }
+      }
+
+      function renderTrackDetails(report) {
+        const container = document.getElementById('trackResultContainer');
+        container.style.display = 'block';
+
+        document.getElementById('trackReportHeading').innerText = `Report ${report.report_id} Details`;
+        document.getElementById('trackDateTimeSub').innerText = `Submitted on ${report.date || ''} at ${report.time || ''}`;
+        document.getElementById('trackCondition').innerText = report.road_condition || 'Pothole';
+        document.getElementById('trackSeverity').innerHTML = getSeverityBadge(report.severity);
+        const isInvalid = (report.severity === 'Invalid') || (report.road_condition && report.road_condition.includes('Invalid'));
+        document.getElementById('trackConfidence').innerText = isInvalid ? '-' : (report.confidence_display || `${Math.round((report.confidence || 0.9) * 100)}% Confidence`);
+        document.getElementById('trackLocation').innerText = report.location || 'Mysuru';
+        document.getElementById('trackDescription').innerText = report.description || 'No description provided.';
+        document.getElementById('trackStatusBadge').innerHTML = getStatusBadge(report.status);
+
+        const imgUrl = report.annotated_image || report.image || 'assets/images/sample_pothole_road.jpg';
+        document.getElementById('trackImage').src = imgUrl;
+
+        document.getElementById('trackMapsBtnWrapper').innerHTML = getGoogleMapsButton(report.google_maps_link, report.location);
+
+        const notesEl = document.getElementById('trackAuthorityNotes');
+        if (notesEl) {
+          notesEl.innerText = report.authority_notes || 'Municipal assessment in progress.';
+        }
+
+        // Timeline progression
+        updateTimeline(report.status || 'New');
+
+        // Scroll to result
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function updateTimeline(status) {
+        const st = status.toLowerCase();
+        const steps = ['stepNew', 'stepVerified', 'stepProgress', 'stepResolved'];
+        const activeColor = '#10b981';
+        const inactiveColor = '#e2e8f0';
+
+        let targetIndex = 0;
+        if (st === 'verified') targetIndex = 1;
+        else if (st === 'in progress') targetIndex = 2;
+        else if (st === 'resolved') targetIndex = 3;
+
+        steps.forEach((stepId, idx) => {
+          const el = document.getElementById(stepId);
+          if (!el) return;
+          const circle = el.querySelector('div');
+          if (idx <= targetIndex) {
+            circle.style.background = '#2563eb';
+            circle.style.color = '#ffffff';
+          } else {
+            circle.style.background = '#e2e8f0';
+            circle.style.color = '#64748b';
+          }
+        });
+      }
+
+      function renderLocalHistory() {
+        const container = document.getElementById('myRecentReportsList');
+        const list = getLocalReportHistory();
+
+        if (!list || list.length === 0) {
+          container.innerHTML = '<p style="color:var(--text-muted);font-size:0.88rem;">No reports recorded on this browser yet. Use the "Report Road Issue" tab to submit your first report!</p>';
+          return;
+        }
+
+        container.innerHTML = list.map(r => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f8fafc;border:1px solid var(--border-color);border-radius:var(--radius-sm);flex-wrap:wrap;gap:10px;">
+            <div>
+              <strong style="color:var(--text-main);font-family:monospace;font-size:0.95rem;">${r.report_id}</strong>
+              <span style="margin:0 8px;color:#94a3b8;">•</span>
+              <span style="font-weight:600;">${r.road_condition || 'Pothole'}</span>
+              <span style="margin:0 8px;color:#94a3b8;">•</span>
+              <small style="color:var(--text-muted);">${r.location || 'Mysuru'}</small>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              ${getStatusBadge(r.status)}
+              <button type="button" class="btn btn-outline btn-sm" onclick="fetchAndDisplayReport('${r.report_id}')">
+                View Status
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    </script>
+  </body>
+</html>
+

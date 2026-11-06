@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mysuru RoadWatch — Real-Time Road Condition Monitoring</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css?v=3.5" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <a class="brand" href="index.html">
+            <div class="brand-mark">
+              <img src="assets/images/app_icon.png" alt="RoadWatch Icon" class="brand-logo-img" />
+            </div>
+            <div class="brand-text">
+              <h2>RoadWatch</h2>
+              <p>Mysuru City</p>
+            </div>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <span class="nav-label">Navigation</span>
+          <a class="nav-item active" href="index.html" title="User Dashboard">
+            <span class="icon">🏠</span>
+            <span>User Dashboard</span>
+          </a>
+          <a class="nav-item" href="user.html" title="Report Road Issue">
+            <span class="icon">📷</span>
+            <span>Report Road Issue</span>
+          </a>
+          <a class="nav-item" href="authority.html" title="Authority Panel">
+            <span class="icon">🏛️</span>
+            <span>Authority Panel</span>
+          </a>
+          <a class="nav-item" href="report.html" title="Track Report">
+            <span class="icon">🔍</span>
+            <span>Track Report</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="city-tag">
+            <div class="indicator"></div>
+            <span id="backendStatusPill">Mysuru RoadWatch Online</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div class="topbar-left-group">
+            <button type="button" class="topbar-menu-btn" id="topbarMenuBtn" title="Toggle Navigation Menu" aria-label="Toggle Navigation Menu">
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+            </button>
+            <div class="topbar-header">
+              <p class="eyebrow">Real-Time Road Monitoring</p>
+              <h1>Mysuru RoadWatch Portal</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <a href="user.html" class="btn btn-amber">
+              <span>📷</span> Snap & Report Issue
+            </a>
+            <a href="authority.html" class="btn btn-outline">
+              <span>🏛️</span> Authority Dashboard
+            </a>
+          </div>
+        </header>
+
+        <!-- Hero Card -->
+        <section class="card" style="background: linear-gradient(135deg, #0f1c2c, #1e293b); color: #ffffff; border-color: #334155;">
+          <div>
+            <div style="max-width: 780px;">
+              <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); margin-bottom: 12px;">
+                AI Powered • YOLO Vision • Firebase Cloud
+              </span>
+              <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; line-height: 1.25;">
+                AI-Driven Road Quality & Pothole Monitoring for Mysuru City
+              </h2>
+              <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                Empowering Mysuru citizens to report potholes, cracks, and road damages directly through mobile cameras. Instant YOLO object detection evaluates severity, coordinates with Google Maps, and dispatches municipal authorities.
+              </p>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="user.html" class="btn btn-amber">
+                  <span>🚀</span> Launch Camera & Report
+                </a>
+                <a href="report.html" class="btn btn-outline" style="background: rgba(255,255,255,0.08); color:#fff; border-color: rgba(255,255,255,0.2);">
+                  <span>🔎</span> Search By Report ID
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-icon blue">📋</div>
+            <div class="stat-meta">
+              <p>Total Reports</p>
+              <h3 id="statTotalReports">—</h3>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon amber">⚠️</div>
+            <div class="stat-meta">
+              <p>New / Pending</p>
+              <h3 id="statNewReports">—</h3>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon red">🚨</div>
+            <div class="stat-meta">
+              <p>High / Critical</p>
+              <h3 id="statCriticalReports">—</h3>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div class="stat-meta">
+              <p>Repaired & Resolved</p>
+              <h3 id="statResolvedReports">—</h3>
+            </div>
+          </article>
+        </section>
+
+        <!-- Citizen How-It-Works Guide -->
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">How RoadWatch Works</h3>
+              <p class="card-subtitle">Real-time citizen reporting and AI computer vision workflow</p>
+            </div>
+            <a href="user.html" class="btn btn-primary btn-sm">
+              <span>📷</span> Report an Issue Now
+            </a>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="width: 42px; height: 42px; border-radius: 12px; background: #dbeafe; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem;">
+                1
+              </div>
+              <h4 style="font-size: 1.02rem; font-weight: 700; color: var(--text-main);">Snap or Upload Image</h4>
+              <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6;">Use your mobile phone camera or upload existing roadway photos of potholes, fissures, or wear.</p>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="width: 42px; height: 42px; border-radius: 12px; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem;">
+                2
+              </div>
+              <h4 style="font-size: 1.02rem; font-weight: 700; color: var(--text-main);">YOLO AI Vision Analysis</h4>
+              <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6;">The AI engine evaluates surface contours, tags bounding boxes, confidence score, and hazard severity.</p>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="width: 42px; height: 42px; border-radius: 12px; background: #ede9fe; color: #6d28d9; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem;">
+                3
+              </div>
+              <h4 style="font-size: 1.02rem; font-weight: 700; color: var(--text-main);">Tag Mysuru Location</h4>
+              <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6;">Auto-detect GPS coordinates or select popular Mysuru road presets with an instant Google Maps link.</p>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="width: 42px; height: 42px; border-radius: 12px; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem;">
+                4
+              </div>
+              <h4 style="font-size: 1.02rem; font-weight: 700; color: var(--text-main);">Municipal Action & Repair</h4>
+              <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.6;">Mysuru City Corporation road engineers inspect the submission, prioritize repairs, and update status.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/api.js?v=3.3"></script>
+    <script src="js/main.js?v=3.3"></script>
+    <script>
+      // Load live summary metrics on User Dashboard
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const res = await window.roadWatchApi.getReports();
+          const stats = res.stats || {};
+          const reports = res.reports || [];
+
+          document.getElementById('statTotalReports').innerText = stats.total_reports || reports.length;
+          document.getElementById('statNewReports').innerText = stats.new_reports || reports.filter(r => r.status === 'New').length;
+          document.getElementById('statCriticalReports').innerText = stats.critical_high_reports || reports.filter(r => r.severity === 'Critical' || r.severity === 'High').length;
+          document.getElementById('statResolvedReports').innerText = stats.resolved_reports || reports.filter(r => r.status === 'Resolved').length;
+        } catch (err) {
+          console.warn('Dashboard metrics fetch error:', err);
+        }
+      });
+    </script>
+  </body>
+</html>
+

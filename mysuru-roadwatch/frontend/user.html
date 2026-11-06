@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report Road Issue | Mysuru RoadWatch</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css?v=3.5" />
+    <link rel="stylesheet" href="css/user.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <a class="brand" href="index.html">
+            <div class="brand-mark">
+              <img src="assets/images/app_icon.png" alt="RoadWatch Icon" class="brand-logo-img" />
+            </div>
+            <div class="brand-text">
+              <h2>RoadWatch</h2>
+              <p>Mysuru City</p>
+            </div>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <span class="nav-label">Navigation</span>
+          <a class="nav-item" href="index.html" title="User Dashboard">
+            <span class="icon">🏠</span>
+            <span>User Dashboard</span>
+          </a>
+          <a class="nav-item active" href="user.html" title="Report Road Issue">
+            <span class="icon">📷</span>
+            <span>Report Road Issue</span>
+          </a>
+          <a class="nav-item" href="authority.html" title="Authority Panel">
+            <span class="icon">🏛️</span>
+            <span>Authority Panel</span>
+          </a>
+          <a class="nav-item" href="report.html" title="Track Report">
+            <span class="icon">🔍</span>
+            <span>Track Report</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="city-tag">
+            <div class="indicator"></div>
+            <span id="backendStatusPill">Mysuru RoadWatch Online</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div class="topbar-left-group">
+            <button type="button" class="topbar-menu-btn" id="topbarMenuBtn" title="Toggle Navigation Menu" aria-label="Toggle Navigation Menu">
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+            </button>
+            <div class="topbar-header">
+              <p class="eyebrow">Citizen Road Reporting</p>
+              <h1>Report Road Damage</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <a href="index.html" class="btn btn-outline">
+              <span>🏠</span> Back to Dashboard
+            </a>
+          </div>
+        </header>
+
+        <div class="user-grid">
+          <!-- Left Column: Camera Capture & Form -->
+          <div>
+            <!-- Media Capture Card -->
+            <section class="media-capture-card">
+              <div class="card-header" style="padding-bottom: 8px; margin-bottom: 14px;">
+                <div>
+                  <h3 class="card-title">1. Capture / Upload Road Evidence</h3>
+                  <p class="card-subtitle">Take a live photo via smartphone camera or upload road image</p>
+                </div>
+              </div>
+
+              <!-- Capture Tabs -->
+              <div class="capture-tabs">
+                <button type="button" class="tab-btn active" id="tabUpload">
+                  <span>📁</span> Upload Image / Video
+                </button>
+                <button type="button" class="tab-btn" id="tabCamera">
+                  <span>📷</span> Live Mobile Camera
+                </button>
+              </div>
+
+              <!-- File Dropzone -->
+              <div class="dropzone" id="dropzone">
+                <div class="dropzone-icon">📸 / 🎥</div>
+                <h3>Click to browse or drop road photo or video here</h3>
+                <p>Supports JPG, PNG, WEBP and MP4, MOV, WEBM road videos with multi-damage scanning</p>
+                <input type="file" id="roadFileInput" accept="image/*,video/*" capture="environment" style="display: none;" />
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+                  <button type="button" class="btn btn-outline btn-sm" id="choosePhotoBtn">
+                    <span>📷</span> Choose Road Photo
+                  </button>
+                  <button type="button" class="btn btn-amber btn-sm" id="chooseVideoBtn">
+                    <span>🎥</span> Upload Road Video (Multi-Damage)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Mobile Camera Container -->
+              <div class="camera-container" id="cameraContainer">
+                <video id="cameraFeed" autoplay playsinline muted></video>
+                <div class="camera-overlay-scan"></div>
+                <div class="camera-controls">
+                  <button type="button" class="camera-switch-btn" id="switchCameraBtn" title="Switch front/back camera">
+                    🔄 Flip Camera
+                  </button>
+                  <button type="button" class="snap-btn" id="snapPhotoBtn" title="Capture Road Photo"></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Report Details Form -->
+            <section class="form-card">
+              <div class="card-header" style="padding-bottom: 8px; margin-bottom: 16px;">
+                <div>
+                  <h3 class="card-title">2. Road Location & Details</h3>
+                  <p class="card-subtitle">Specify road details and Google Maps location in Mysuru</p>
+                </div>
+              </div>
+
+              <form id="roadReportForm">
+                <div class="form-group">
+                  <label for="locationInput">Area Name *</label>
+                  <input type="text" id="locationInput" class="form-input" placeholder="Enter area name (e.g. Vijayanagar, Sayyaji Rao Road, Jayalakshmipuram, Mysuru)" required />
+                  <span class="field-hint">Auto-detected via GPS location, or enter manually.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="mapsLinkInput">Google Maps Location Link</label>
+                  <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 220px; position: relative;">
+                      <input type="url" id="mapsLinkInput" class="form-input" readonly placeholder="Auto-generated via GPS (editing disabled)..." style="width: 100%; background-color: #f1f5f9; cursor: not-allowed; color: #475569; padding-right: 32px;" />
+                      <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.85rem; color: #94a3b8; pointer-events: none;" title="Locked: Editing disabled">🔒</span>
+                    </div>
+                    <button type="button" class="btn btn-outline" id="detectLocationBtn" style="white-space: nowrap; padding: 11px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px;">
+                      <span>📍</span> Auto-Detect GPS
+                    </button>
+                  </div>
+                  <span class="field-hint">Auto-generated via GPS location. Manual editing is disabled to ensure location authenticity.</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-group">
+                    <label for="roadConditionSelect">Road Condition (AI Detected)</label>
+                    <select id="roadConditionSelect" class="form-select">
+                      <option value="" selected disabled>— Awaiting AI Detection —</option>
+                      <option value="Pothole">Pothole</option>
+                      <option value="Severe Pothole Cluster">Severe Pothole Cluster</option>
+                      <option value="Road Crack">Road Crack</option>
+                      <option value="Alligator Crack">Alligator Crack</option>
+                      <option value="Drainage Blockage">Drainage Blockage</option>
+                      <option value="Surface Wear">Surface Wear</option>
+                      <option value="Normal Road — No Damage Detected">Normal Road — No Damage Detected</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="severitySelect">Severity Level (AI Estimated Range)</label>
+                    <select id="severitySelect" class="form-select">
+                      <option value="" selected disabled>— Awaiting AI Estimation —</option>
+                      <option value="Critical">Critical (90% – 100% / Immediate Hazard)</option>
+                      <option value="High">High (80% – 89% / Major Damage)</option>
+                      <option value="Moderate">Moderate (65% – 79% / Noticeable)</option>
+                      <option value="Low">Low (Below 65% / Minor Wear)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-group">
+                    <label for="roadTypeSelect">Road Classification</label>
+                    <select id="roadTypeSelect" class="form-select">
+                      <option value="City road" selected>City Road</option>
+                      <option value="Highway">State Highway</option>
+                      <option value="Commercial Area">Commercial Main Street</option>
+                      <option value="Residential">Residential Lane</option>
+                      <option value="Ring Road">Outer Ring Road</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="reporterNameInput">Reporter Name (Optional)</label>
+                    <input type="text" id="reporterNameInput" class="form-input" placeholder="e.g. Citizen Reporter" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="descriptionInput">Problem Description</label>
+                  <textarea id="descriptionInput" class="form-textarea" placeholder="Auto-filled by AI assessment after image is analyzed..."></textarea>
+                  <span class="field-hint">Auto-filled from AI Assessment. You can edit or add additional notes.</span>
+                </div>
+
+                <div style="margin-top: 10px;">
+                  <button type="submit" id="submitReportBtn" class="btn btn-primary btn-lg" style="width: 100%; opacity: 0.6; cursor: not-allowed;" disabled>
+                    <span>🚀</span> Submit Road Report
+                  </button>
+                  <div id="submitDisabledNotice" style="display: block; margin-top: 10px; padding: 10px 12px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.82rem; color: #64748b; font-weight: 600; text-align: center; line-height: 1.4;">
+                    📷 Please capture or upload a road damage photo first to enable report submission.
+                  </div>
+                </div>
+              </form>
+            </section>
+          </div>
+
+          <!-- Right Column: AI Live Detection Results Card -->
+          <div>
+            <section class="ai-preview-card">
+              <div class="ai-header-badge">
+                <span class="ai-pill">
+                  <span>🧠</span> YOLO Vision Engine
+                </span>
+                <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Real-Time Detection</span>
+              </div>
+
+              <!-- Image with Bounding Boxes -->
+              <div class="image-preview-wrapper" id="imagePreviewWrapper">
+                <div id="aiEmptyPlaceholder" style="text-align: center; padding: 36px 16px; color: #94a3b8;">
+                  <div style="font-size: 3rem; margin-bottom: 8px;">📷</div>
+                  <strong style="display: block; font-size: 0.95rem; color: #64748b; margin-bottom: 4px;">No Road Image Uploaded</strong>
+                  <p style="font-size: 0.8rem; margin: 0; max-width: 260px; color: #94a3b8; line-height: 1.4;">Capture photo or upload road image above to trigger YOLO AI analysis</p>
+                </div>
+                <img id="aiPreviewImage" class="preview-img" src="" alt="Road Condition Preview" style="display: none;" />
+                <video id="aiPreviewVideo" class="preview-img" controls autoplay muted loop playsinline style="display: none; width: 100%; max-height: 380px; object-fit: contain; border-radius: var(--radius-sm);"></video>
+                
+                <!-- Video Keyframe vs Video Toggle Controls -->
+                <div id="videoViewToggleBar" style="display: none; position: absolute; bottom: 12px; left: 12px; right: 12px; z-index: 10; gap: 8px; justify-content: center; background: rgba(15, 23, 42, 0.85); padding: 6px 10px; border-radius: 8px; backdrop-filter: blur(4px);">
+                  <button type="button" class="btn btn-amber btn-sm" id="viewAnnotatedKeyframeBtn" style="padding: 4px 10px; font-size: 0.76rem;">
+                    <span>📷</span> Keyframe (Detected Damages)
+                  </button>
+                  <button type="button" class="btn btn-outline btn-sm" id="viewOriginalVideoBtn" style="padding: 4px 10px; font-size: 0.76rem; background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.3);">
+                    <span>🎥</span> Play Video
+                  </button>
+                </div>
+                <div class="ai-loading-overlay" id="aiLoadingOverlay">
+                  <!-- Laser Scan Beam -->
+                  <div class="ai-scan-laser"></div>
+
+                  <!-- Simulated Dynamic Recognition Bounding Boxes -->
+                  <div class="fake-recognition-box" id="fakeRecBox1" style="top: 25%; left: 20%; width: 45%; height: 38%; display: none;">
+                    <span class="fake-rec-tag"><span class="fake-rec-dot"></span> <span id="fakeRecTag1">SCANNING ROI: [X:142, Y:86]</span></span>
+                  </div>
+                  <div class="fake-recognition-box" id="fakeRecBox2" style="top: 48%; left: 45%; width: 38%; height: 32%; display: none;">
+                    <span class="fake-rec-tag"><span class="fake-rec-dot"></span> <span id="fakeRecTag2">DEFECT CANDIDATE: 89.2%</span></span>
+                  </div>
+
+                  <!-- Central Recognition Console Card -->
+                  <div class="ai-recognition-card">
+                    <div class="ai-recognition-badge">
+                      <span>🧠</span> Neural Recognition Active
+                    </div>
+                    <div id="aiRecognitionStep" class="ai-recognition-step">Initializing neural scanner...</div>
+                    <div class="ai-recognition-progress-bar">
+                      <div class="ai-recognition-progress-fill" id="aiRecognitionProgressFill"></div>
+                    </div>
+                    <div class="ai-recognition-meta">
+                      <span>YOLOv8 Vision Model</span>
+                      <div class="ai-recognition-ticker">Confidence: <strong id="aiRecognitionTickerVal">0%</strong></div>
+                    </div>
+                    <div id="aiRecognitionSubLog" class="ai-recognition-sublog">Tensor input shape: [1, 3, 640, 640]</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Video Multi-Damage Analysis Summary Banner -->
+              <div id="aiVideoBreakdownBanner" style="display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                  <strong style="font-size: 0.88rem; color: #166534; display: flex; align-items: center; gap: 6px;">
+                    <span>🎥</span> Multi-Damage Video Detection Completed
+                  </strong>
+                  <span id="aiVideoDurationBadge" class="badge" style="background: #bbf7d0; color: #14532d; font-weight: 700; font-size: 0.72rem;"></span>
+                </div>
+                <div id="aiVideoBreakdownStats" style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                  <!-- Dynamically populated tags for detected potholes & cracks -->
+                </div>
+              </div>
+
+              <!-- AI Metrics -->
+              <div class="ai-metrics-grid">
+                <div class="ai-metric-item">
+                  <span>Damage Type</span>
+                  <strong id="aiConditionDisplay" style="color: var(--text-muted);">—</strong>
+                </div>
+
+                <div class="ai-metric-item">
+                  <span>Confidence</span>
+                  <strong id="aiConfidenceDisplay" style="color: var(--text-muted);">—</strong>
+                </div>
+
+                <div class="ai-metric-item">
+                  <span>Severity</span>
+                  <div id="aiSeverityDisplay">
+                    <span style="color: var(--text-muted); font-size: 0.95rem; font-weight: 600;">—</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Detection Summary Note -->
+              <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.82rem; color: #475569; line-height: 1.5;">
+                <strong style="display: block; margin-bottom: 2px; color: var(--text-main);">AI Assessment:</strong>
+                <span id="aiSummaryText" style="color: var(--text-muted);">Awaiting image upload to generate real-time AI damage assessment.</span>
+              </div>
+
+              <!-- Mysuru Authority Dispatch Notice -->
+              <div style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.82rem; color: #1e40af; line-height: 1.5;">
+                <strong>Notice:</strong> Reports submitted here are forwarded directly to the Mysuru City Road Maintenance Cell.
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Success Confirmation Modal -->
+    <div class="modal-overlay" id="reportSuccessModal">
+      <div class="modal-content" style="max-width: 520px;">
+        <div class="success-card">
+          <div class="success-badge-icon">✅</div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 6px;">Report Submitted Successfully!</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">
+            Your road condition report has been logged into the Firebase database and queued for municipal inspection.
+          </p>
+
+          <div style="margin: 16px 0;">
+            <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">
+              Your Unique Report Tracking ID:
+            </div>
+            <div class="report-id-chip" id="successReportId">RW-001</div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px; text-align: left; font-size: 0.85rem; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="color: var(--text-muted);">Condition:</span>
+              <strong id="successCondition">Pothole</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="color: var(--text-muted);">Severity:</span>
+              <span id="successSeverity"><span class="badge badge-high">High</span></span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Location:</span>
+              <span id="successLocation" style="font-weight: 600; text-align: right; max-width: 260px;">Mysuru</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="report.html" class="btn btn-primary" id="trackReportLink">
+              <span>🔍</span> Track Status
+            </a>
+            <button type="button" class="btn btn-outline" onclick="closeModal('reportSuccessModal'); if (typeof resetFormToInitialState === 'function') resetFormToInitialState();">
+              Report Another Issue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js?v=3.3"></script>
+    <script src="js/main.js?v=3.3"></script>
+    <script src="js/user.js?v=3.3"></script>
+  </body>
+</html>
+

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report Status Analytics | Mysuru RoadWatch</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css?v=3.5" />
+    <link rel="stylesheet" href="css/authority.css?v=3.2" />
+    <link rel="stylesheet" href="css/analytics.css?v=1.0" />
+    <script>
+      (function() {
+        try {
+          sessionStorage.setItem('mysuru_authority_logged_in', 'true');
+          localStorage.setItem('mysuru_authority_logged_in', 'true');
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      .analytics-page-card {
+        background: var(--bg-surface, #ffffff);
+        border: 1px solid var(--border-color, #e2e8f0);
+        border-radius: var(--radius-lg, 12px);
+        padding: 24px;
+        box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+        margin-bottom: 24px;
+      }
+      .analytics-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 22px;
+        margin-bottom: 22px;
+      }
+      @media (max-width: 900px) {
+        .analytics-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .analytics-box {
+        background: #f8fafc;
+        border: 1px solid var(--border-color, #e2e8f0);
+        border-radius: var(--radius-md, 8px);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .analytics-box-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-main, #0f172a);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .analytics-summary-banner {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: var(--radius-md, 8px);
+        padding: 18px 20px;
+        margin-bottom: 22px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <a class="brand" href="authority.html?from=analytics">
+            <div class="brand-mark">
+              <img src="assets/images/app_icon.png" alt="RoadWatch Icon" class="brand-logo-img" />
+            </div>
+            <div class="brand-text">
+              <h2>RoadWatch</h2>
+              <p>Analytics Center</p>
+            </div>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <span class="nav-label">Navigation</span>
+          <a class="nav-item" href="authority.html?from=analytics" title="Authority Dashboard">
+            <span class="icon">🏛️</span>
+            <span>Authority Dashboard</span>
+          </a>
+          <a class="nav-item" href="report.html" title="Track Report">
+            <span class="icon">🔍</span>
+            <span>Track Report</span>
+          </a>
+          <a class="nav-item" href="user.html" title="Citizen Road Report">
+            <span class="icon">📷</span>
+            <span>Citizen Report</span>
+          </a>
+          <a class="nav-item" href="index.html" title="Public Dashboard">
+            <span class="icon">🏠</span>
+            <span>Public Dashboard</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="city-tag">
+            <div class="indicator"></div>
+            <span>Mysuru Municipal Corporation</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+          <div class="topbar-left-group">
+            <button type="button" class="topbar-menu-btn" id="topbarMenuBtn" title="Toggle Navigation Menu">
+              ☰
+            </button>
+            <div class="topbar-header">
+              <p class="eyebrow">Mysuru Municipal Corporation • Authority Panel</p>
+              <h1>Road Condition Reports Graph Analytics</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <a href="authority.html?from=analytics" class="btn btn-outline" title="Return to main authority dashboard">
+              <span>←</span> Back to Dashboard
+            </a>
+            <button type="button" class="btn btn-outline" id="refreshAnalyticsBtn" title="Refresh road reports from server">
+              <span>🔄</span> Refresh Data
+            </button>
+          </div>
+        </header>
+
+        <!-- Main Analytics Card -->
+        <section class="analytics-page-card">
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">📈</span>
+                <div>
+                  <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 0;">
+                    Report Status Distribution & Damage Analytics
+                  </h2>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 3px;">
+                    Real-time visual breakdown of all road condition complaints registered across Mysuru City Corporation wards.
+                  </p>
+                </div>
+              </div>
+              <div>
+                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; font-size: 0.76rem; padding: 4px 10px; border-radius: 999px; font-weight: 700;">
+                  Live Database Feed
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Visual Panels Grid -->
+          <div class="analytics-grid">
+            <!-- Left: Pie / Donut Chart of Statuses -->
+            <div class="analytics-box">
+              <div class="analytics-box-title">
+                <span>🥧</span>
+                <span>Report Status Distribution</span>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-around; gap: 18px; flex-wrap: wrap; flex: 1;">
+                <!-- SVG Donut -->
+                <div class="pie-svg-wrapper" style="width: 220px; height: 220px;">
+                  <svg id="analyticsStatusPieSvg" class="pie-svg" viewBox="0 0 250 250"></svg>
+                  <div class="pie-center-label">
+                    <span class="pie-center-count" id="analyticsCenterTotal">0</span>
+                    <span class="pie-center-sub">Total Reports</span>
+                  </div>
+                </div>
+
+                <!-- Legend -->
+                <div id="analyticsStatusLegend" class="pie-legend-list" style="flex: 1; min-width: 170px;">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Severity & Defect Breakdown -->
+            <div class="analytics-box" style="justify-content: space-between;">
+              <div>
+                <div class="analytics-box-title">
+                  <span>⚠️</span>
+                  <span>Damage Severity Breakdown</span>
+                </div>
+                <div id="analyticsSeverityBars" style="display: flex; flex-direction: column; gap: 11px;">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+                <div class="analytics-box-title" style="margin-bottom: 10px; font-size: 0.88rem;">
+                  <span>🛣️</span>
+                  <span>Defect Category Distribution</span>
+                </div>
+                <div id="analyticsDefectPills" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Match Summary Strip -->
+          <div class="analytics-summary-banner" id="analyticsSummaryBanner">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.4rem;">📊</span>
+                <div>
+                  <strong style="font-size: 1rem; color: #166534;" id="analyticsSummaryHeadline">
+                    Municipal Complaint Progression Overview
+                  </strong>
+                  <div style="font-size: 0.82rem; color: #15803d; margin-top: 2px;" id="analyticsSummarySubtext">
+                    All reports registered in the central system
+                  </div>
+                </div>
+              </div>
+
+              <div id="analyticsStatusChips" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <!-- Status chips populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <a href="authority.html?from=analytics" class="btn btn-outline" id="backToAuthorityBtn">
+              <span>←</span> Back to Authority Dashboard
+            </a>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <a href="export.html" class="btn btn-primary" title="Export reports to CSV">
+                <span>📊</span> Export Reports to CSV
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Chart Tooltip -->
+    <div id="analyticsPieTooltip" class="chart-tooltip" style="display: none;"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js?v=3.5"></script>
+    <script src="js/main.js?v=3.5"></script>
+    <script src="js/analytics.js?v=2.0"></script>
+  </body>
+</html>

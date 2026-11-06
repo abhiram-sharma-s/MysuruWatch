@@ -1,0 +1,9 @@
+# Mysuru RoadWatch — Water Body on Road Surface Dataset
+path: D:/main project/mysuru-roadwatch/data/water_dataset
+train: images/train
+val: images/val
+
+names:
+  0: water_body
+  1: puddle
+  2: waterlogged_pothole

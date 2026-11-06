@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authority Dashboard | Mysuru RoadWatch</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css?v=3.5" />
+    <link rel="stylesheet" href="css/authority.css?v=3.2" />
+    <script>
+      (function() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var fromPage = params.get('from');
+          var ref = (document.referrer || '').toLowerCase();
+          if (fromPage === 'export' || fromPage === 'analytics' || ref.indexOf('export') !== -1 || ref.indexOf('analytics') !== -1) {
+            sessionStorage.setItem('mysuru_authority_logged_in', 'true');
+            localStorage.setItem('mysuru_authority_logged_in', 'true');
+          }
+        } catch (e) {}
+        if (sessionStorage.getItem('mysuru_authority_logged_in') === 'true' || localStorage.getItem('mysuru_authority_logged_in') === 'true') {
+          document.documentElement.classList.add('authority-logged-in');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Authority Security Login Gatekeeper Overlay -->
+    <div class="authority-login-overlay" id="authorityLoginOverlay">
+      <div class="authority-login-card" id="authorityLoginCard">
+        <div class="auth-lock-icon">🏛️</div>
+        <h2 class="auth-title">Authority Portal Login</h2>
+        <p class="auth-subtitle">
+          Protected municipal access for Mysuru City Corporation road engineers and administrators.
+        </p>
+
+        <form id="authorityLoginForm">
+          <div class="password-input-group">
+            <label for="authorityPasswordInput">Security Password</label>
+            <div class="password-field-wrapper">
+              <input type="password" id="authorityPasswordInput" placeholder="Enter security password..." required autocomplete="current-password" />
+              <button type="button" class="toggle-password-visibility-btn" id="togglePasswordBtn" title="Toggle password visibility">
+                👁️
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" id="unlockDashboardBtn" style="width: 100%; margin-bottom: 14px;">
+            <span>🔓</span> Unlock Authority Dashboard
+          </button>
+
+          <a href="index.html" class="btn btn-outline" style="width: 100%;">
+            <span>🏠</span> Return to Public Dashboard
+          </a>
+        </form>
+      </div>
+    </div>
+
+    <div class="app-shell">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <a class="brand" href="index.html">
+            <div class="brand-mark">
+              <img src="assets/images/app_icon.png" alt="RoadWatch Icon" class="brand-logo-img" />
+            </div>
+            <div class="brand-text">
+              <h2>RoadWatch</h2>
+              <p>Authority Panel</p>
+            </div>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <span class="nav-label">Navigation</span>
+          <a class="nav-item" href="index.html" title="User Dashboard">
+            <span class="icon">🏠</span>
+            <span>User Dashboard</span>
+          </a>
+          <a class="nav-item" href="user.html" title="Report Road Issue">
+            <span class="icon">📷</span>
+            <span>Report Road Issue</span>
+          </a>
+          <a class="nav-item active" href="authority.html" title="Authority Dashboard">
+            <span class="icon">🏛️</span>
+            <span>Authority Dashboard</span>
+          </a>
+          <a class="nav-item" href="report.html" title="Track Report">
+            <span class="icon">🔍</span>
+            <span>Track Report</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="city-tag">
+            <div class="indicator"></div>
+            <span id="backendStatusPill">Mysuru Municipal Admin</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+          <div class="topbar-left-group">
+            <button type="button" class="topbar-menu-btn" id="topbarMenuBtn" title="Toggle Navigation Menu" aria-label="Toggle Navigation Menu">
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+              <span class="menu-line"></span>
+            </button>
+            <div class="topbar-header">
+              <p class="eyebrow">Mysuru Municipal Corporation</p>
+              <h1>Road Condition Authority Dashboard</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <!-- Reports Since Last Login Notification Button -->
+            <button type="button" class="btn btn-outline notice-bell-btn" id="loginNoticeBellBtn" title="View reports submitted since last login">
+              <span class="bell-icon">🔔</span>
+              <span class="notice-bell-label">Since Last Login:</span>
+              <span id="loginNoticeBadge" class="badge badge-new" style="margin-left: 4px; padding: 2px 7px; font-size: 0.74rem; font-weight: 700;">0 New</span>
+            </button>
+
+            <button type="button" class="btn btn-outline" id="refreshReportsBtn">
+              <span>🔄</span> Refresh
+            </button>
+            <a href="analytics.html" class="btn btn-outline" id="topbarGraphBtn" title="Open Report Status Graph Analytics">
+              <span>📈</span> Graph View
+            </a>
+            <a href="export.html" class="btn btn-outline" id="exportCsvBtn" title="Open Export & Date Filter page">
+              <span>📊</span> Export CSV
+            </a>
+            <button type="button" class="btn btn-outline" id="authorityLogoutBtn" title="Lock the authority dashboard">
+              <span>🔒</span> Lock Panel
+            </button>
+          </div>
+        </header>
+
+        <!-- KPI Metric Cards -->
+        <section class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-icon blue">📋</div>
+            <div class="stat-meta">
+              <p>Total Reports</p>
+              <h3 id="kpiTotalReports">—</h3>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon amber">🔔</div>
+            <div class="stat-meta">
+              <p>New Reports</p>
+              <h3 id="kpiNewReports">—</h3>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon red">🚨</div>
+            <div class="stat-meta">
+              <p>Critical / High Severity</p>
+              <h3 id="kpiCriticalReports">—</h3>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon purple">🛠️</div>
+            <div class="stat-meta">
+              <p>In Progress / Repairs</p>
+              <h3 id="kpiInProgressReports">—</h3>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div class="stat-meta">
+              <p>Resolved Cases</p>
+              <h3 id="kpiResolvedReports">—</h3>
+            </div>
+          </article>
+        </section>
+
+        <!-- Search and Filters Bar -->
+        <section class="authority-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="authoritySearchInput" placeholder="Search by Report ID, Road location, or Condition..." />
+          </div>
+
+          <!-- Status Filters -->
+          <div class="filter-group">
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Status:</span>
+            <button type="button" class="filter-pill active" data-status="all">All</button>
+            <button type="button" class="filter-pill" data-status="New">New</button>
+            <button type="button" class="filter-pill" data-status="Verified">Verified</button>
+            <button type="button" class="filter-pill" data-status="In Progress">In Progress</button>
+            <button type="button" class="filter-pill" data-status="Resolved">Resolved</button>
+          </div>
+
+          <!-- Severity Filter -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label for="filterSeveritySelect" style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Severity:</label>
+            <select id="filterSeveritySelect" class="form-select" style="padding: 7px 12px; font-size: 0.82rem; border-radius: var(--radius-pill); width: auto;">
+              <option value="all">All Severities</option>
+              <option value="Critical">Critical (90% – 100%)</option>
+              <option value="High">High (80% – 89%)</option>
+              <option value="Moderate">Moderate (65% – 79%)</option>
+              <option value="Low">Low (Below 65%)</option>
+            </select>
+          </div>
+
+          <!-- Submission Date Range Filter -->
+          <div class="date-filter-group" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <label for="filterStartDate" style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
+              <span>📅</span> Submission Dates:
+            </label>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <input type="date" id="filterStartDate" class="date-filter-input" title="From submission date" />
+              <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">to</span>
+              <input type="date" id="filterEndDate" class="date-filter-input" title="To submission date" />
+              <button type="button" class="btn btn-outline" id="clearDateFilterBtn" title="Clear date filter" style="padding: 5px 10px; font-size: 0.75rem; border-radius: var(--radius-pill); display: none;">
+                ✕ Clear
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main Reports Table Card -->
+        <section class="table-card">
+          <div class="card-header" style="padding: 16px 20px; margin-bottom: 0;">
+            <div>
+              <h3 class="card-title">Road Condition Reports List</h3>
+              <p class="card-subtitle" id="tableCountDisplay">Showing all registered reports</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="reports-table">
+              <thead>
+                <tr>
+                  <th>Report ID</th>
+                  <th>Condition</th>
+                  <th>Severity</th>
+                  <th>Location</th>
+                  <th>Google Maps</th>
+                  <th>Date & Time</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="reportsTableBody">
+                <!-- Dynamically loaded rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Inspection and Status Update Modal -->
+    <div class="modal-overlay" id="inspectReportModal">
+      <div class="modal-content" style="max-width: 820px;">
+        <div class="modal-header">
+          <div>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main);">
+              Inspect Report <span id="inspectReportId" style="color: #2563eb;">RW-001</span>
+            </h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Review YOLO detection bounding boxes & update municipal action</p>
+          </div>
+          <button type="button" class="modal-close-btn" onclick="closeModal('inspectReportModal')">&times;</button>
+        </div>
+
+        <div class="inspect-grid">
+          <!-- Annotated Detection Image -->
+          <div class="inspect-media">
+            <img id="inspectModalImage" src="assets/images/sample_pothole_road.jpg" alt="Annotated Road Defect" />
+          </div>
+
+          <!-- Metadata & Actions -->
+          <div class="inspect-info">
+            <div class="inspect-item">
+              <span>Road Condition & Severity</span>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                <strong id="inspectCondition" style="font-size: 1.1rem;">Pothole</strong>
+                <span id="inspectSeverityBadge"><span class="badge badge-high">High</span></span>
+                <span id="inspectConfidence" style="display: none;"></span>
+              </div>
+            </div>
+
+            <div class="inspect-item">
+              <span>Mysuru Road Location</span>
+              <strong id="inspectLocation">Sayyaji Rao Road, Near Mysore Palace, Mysuru</strong>
+              <div id="inspectMapsButtonContainer" style="margin-top: 6px;"></div>
+            </div>
+
+            <div class="inspect-item">
+              <span>Reporter & Timestamp</span>
+              <p style="margin: 0; font-size: 0.85rem;">
+                Reported by <strong id="inspectReporter">Citizen</strong> on <span id="inspectDateTime">12-Oct-2026 at 10:15 AM</span>
+              </p>
+            </div>
+
+            <div class="inspect-item">
+              <span>Citizen Problem Description</span>
+              <p id="inspectDescription" style="margin: 0; font-size: 0.85rem; color: #475569;">
+                Deep pothole near junction causing traffic slowdown.
+              </p>
+            </div>
+
+            <div class="inspect-item">
+              <span>Current Status</span>
+              <div id="inspectStatusBadge" style="margin-top: 4px;">
+                <span class="badge badge-new">New</span>
+              </div>
+            </div>
+
+            <!-- Quick Status Change Actions -->
+            <div style="margin-top: 6px;">
+              <span style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 8px;">
+                Update Report Status:
+              </span>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-outline btn-sm inspect-status-btn" data-status="Verified">
+                  ✅ Verify Issue
+                </button>
+                <button type="button" class="btn btn-outline btn-sm inspect-status-btn" data-status="In Progress">
+                  🛠️ Dispatch Team (In Progress)
+                </button>
+                <button type="button" class="btn btn-outline btn-sm inspect-status-btn" data-status="Resolved">
+                  🎉 Mark Resolved
+                </button>
+              </div>
+            </div>
+
+            <!-- Internal Authority Notes -->
+            <div style="margin-top: 8px;">
+              <label for="inspectNotesInput" style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;">
+                Authority Action Log / Notes:
+              </label>
+              <textarea id="inspectNotesInput" class="form-textarea" style="min-height: 60px; font-size: 0.84rem;" placeholder="Add internal inspection comments or contractor dispatch details..."></textarea>
+              <button type="button" class="btn btn-primary btn-sm" id="saveInspectNotesBtn" style="margin-top: 8px;">
+                Save Action Notes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Floating Notification Container for incoming reports while logged in -->
+    <div id="liveReportAlertContainer" class="live-alerts-container" aria-live="polite"></div>
+
+    <!-- Login Notification Modal: Reports Submitted Since Last Login -->
+    <div class="modal-overlay" id="loginNoticeModal">
+      <div class="modal-content" style="max-width: 760px;">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="notice-modal-icon">🔔</div>
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 0;">
+                Reports Submitted Since Last Login
+              </h2>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                Mysuru City Corporation • Authority Activity Notification
+              </p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" onclick="closeModal('loginNoticeModal')">&times;</button>
+        </div>
+
+        <div style="padding: 16px 20px;">
+          <!-- Login Window Meta Banner -->
+          <div class="login-notice-summary-card">
+            <div class="notice-meta-row">
+              <div class="notice-meta-item">
+                <span class="notice-meta-label">Previous Login:</span>
+                <strong id="noticePrevLoginText">—</strong>
+              </div>
+              <div class="notice-meta-item">
+                <span class="notice-meta-label">Current Login:</span>
+                <strong id="noticeCurrentLoginText">—</strong>
+              </div>
+            </div>
+            <div class="notice-count-banner" id="noticeCountBanner">
+              <span class="notice-count-icon">📊</span>
+              <span id="noticeCountHeadline">Checking reports...</span>
+            </div>
+          </div>
+
+          <!-- Reports List / Table Preview -->
+          <div id="loginNoticeReportsWrapper" style="margin-top: 14px; max-height: 290px; overflow-y: auto;">
+            <table class="reports-table" style="font-size: 0.84rem;">
+              <thead>
+                <tr>
+                  <th>Report ID</th>
+                  <th>Condition</th>
+                  <th>Severity</th>
+                  <th>Location</th>
+                  <th>Submitted At</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="loginNoticeTableBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State if 0 new reports -->
+          <div id="loginNoticeEmptyState" class="empty-state" style="display: none; padding: 25px 15px;">
+            <div class="icon">✅</div>
+            <h3>No New Reports Submitted</h3>
+            <p id="loginNoticeEmptyDesc">No new road defects were submitted between your last login and now.</p>
+          </div>
+
+          <!-- Footer Actions -->
+          <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 14px;">
+            <button type="button" class="btn btn-primary" id="viewNewReportsBtn">
+              <span>📋</span> View In Table
+            </button>
+            <button type="button" class="btn btn-outline" onclick="closeModal('loginNoticeModal')">
+              Dismiss
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js?v=3.4"></script>
+    <script src="js/main.js?v=3.4"></script>
+    <script src="js/authority.js?v=3.4"></script>
+  </body>
+</html>
+

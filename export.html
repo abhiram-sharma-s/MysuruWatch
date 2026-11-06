@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Export Reports | Mysuru RoadWatch</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css?v=3.5" />
+    <link rel="stylesheet" href="css/authority.css?v=3.2" />
+    <script>
+      (function() {
+        try {
+          sessionStorage.setItem('mysuru_authority_logged_in', 'true');
+          localStorage.setItem('mysuru_authority_logged_in', 'true');
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      .export-page-card {
+        background: var(--bg-surface, #ffffff);
+        border: 1px solid var(--border-color, #e2e8f0);
+        border-radius: var(--radius-lg, 12px);
+        padding: 24px;
+        box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+        margin-bottom: 24px;
+      }
+      .export-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 20px;
+        margin-bottom: 22px;
+      }
+      @media (max-width: 900px) {
+        .export-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .filter-box {
+        background: #f8fafc;
+        border: 1px solid var(--border-color, #e2e8f0);
+        border-radius: var(--radius-md, 8px);
+        padding: 18px;
+      }
+      .filter-box-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--text-main, #0f172a);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .date-inputs-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .form-field-label {
+        display: block;
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--text-muted, #64748b);
+        margin-bottom: 5px;
+      }
+      .export-summary-banner {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: var(--radius-md, 8px);
+        padding: 18px 20px;
+        margin-bottom: 22px;
+        transition: all 0.25s ease;
+      }
+      .redirect-alert-banner {
+        display: none;
+        background: #eff6ff;
+        border: 2px solid #3b82f6;
+        border-radius: var(--radius-md, 8px);
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        animation: pulseBorder 1.5s infinite alternate;
+      }
+      @keyframes pulseBorder {
+        from { border-color: #3b82f6; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+        to { border-color: #1d4ed8; box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.15); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <a class="brand" href="authority.html?from=export">
+            <div class="brand-mark">
+              <img src="assets/images/app_icon.png" alt="RoadWatch Icon" class="brand-logo-img" />
+            </div>
+            <div class="brand-text">
+              <h2>RoadWatch</h2>
+              <p>Export Center</p>
+            </div>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <span class="nav-label">Navigation</span>
+          <a class="nav-item" href="authority.html?from=export" title="Authority Dashboard">
+            <span class="icon">🏛️</span>
+            <span>Authority Dashboard</span>
+          </a>
+          <a class="nav-item" href="report.html" title="Track Report">
+            <span class="icon">🔍</span>
+            <span>Track Report</span>
+          </a>
+          <a class="nav-item" href="user.html" title="Citizen Road Report">
+            <span class="icon">📷</span>
+            <span>Citizen Report</span>
+          </a>
+          <a class="nav-item" href="index.html" title="Public Dashboard">
+            <span class="icon">🏠</span>
+            <span>Public Dashboard</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="city-tag">
+            <div class="indicator"></div>
+            <span>Mysuru Municipal Corporation</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+          <div class="topbar-left-group">
+            <button type="button" class="topbar-menu-btn" id="topbarMenuBtn" title="Toggle Navigation Menu">
+              ☰
+            </button>
+            <div class="topbar-header">
+              <p class="eyebrow">Mysuru Municipal Corporation • Authority Panel</p>
+              <h1>Road Condition Reports Export Center</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <a href="authority.html?from=export" class="btn btn-outline" title="Return to main dashboard">
+              <span>←</span> Back to Dashboard
+            </a>
+            <button type="button" class="btn btn-outline" id="refreshExportDataBtn" title="Refresh road reports from server">
+              <span>🔄</span> Refresh Data
+            </button>
+          </div>
+        </header>
+
+        <!-- Redirect Notice Banner (Triggered upon download) -->
+        <div class="redirect-alert-banner" id="redirectNoticeBox">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: #dbeafe; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                📥
+              </div>
+              <div>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #1e3a8a;">
+                  CSV Report Downloaded Successfully!
+                </h3>
+                <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #1e40af;">
+                  Redirecting back to Authority Dashboard in <strong id="redirectCountdown" style="font-size: 1rem; color: #1d4ed8;">2</strong> seconds...
+                </p>
+              </div>
+            </div>
+            <div>
+              <a href="authority.html?from=export" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.84rem;">
+                <span>🚀</span> Return to Dashboard Now
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export Configuration Card -->
+        <section class="export-page-card">
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.5rem;">📊</span>
+              <div>
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 0;">
+                  Filter Reports by Submission Dates
+                </h2>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 3px;">
+                  Configure submission date bounds and criteria to export the exact road defect records needed for municipal road maintenance.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Filter Columns -->
+          <div class="export-grid">
+            <!-- Left: Submission Date Range Filter -->
+            <div class="filter-box">
+              <div class="filter-box-title">
+                <span>📅</span>
+                <span>Submission Date Range (Inclusive)</span>
+              </div>
+
+              <div class="date-inputs-row">
+                <div>
+                  <label for="exportStartDate" class="form-field-label">From Date (Start):</label>
+                  <input type="date" id="exportStartDate" class="date-filter-input" style="width: 100%; padding: 9px 12px; font-size: 0.86rem;" />
+                </div>
+                <div>
+                  <label for="exportEndDate" class="form-field-label">To Date (End):</label>
+                  <input type="date" id="exportEndDate" class="date-filter-input" style="width: 100%; padding: 9px 12px; font-size: 0.86rem;" />
+                </div>
+              </div>
+
+              <!-- Quick Presets -->
+              <div style="margin-top: 14px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-right: 2px;">
+                  Presets:
+                </span>
+                <button type="button" class="csv-preset-btn active" data-preset="all">All Dates</button>
+                <button type="button" class="csv-preset-btn" data-preset="today">Today</button>
+                <button type="button" class="csv-preset-btn" data-preset="yesterday">Yesterday</button>
+                <button type="button" class="csv-preset-btn" data-preset="last7">Last 7 Days</button>
+                <button type="button" class="csv-preset-btn" data-preset="last30">Last 30 Days</button>
+                <button type="button" class="csv-preset-btn" data-preset="thisMonth">This Month</button>
+              </div>
+            </div>
+
+            <!-- Right: Status, Severity & Search Refinements -->
+            <div class="filter-box">
+              <div class="filter-box-title">
+                <span>⚙️</span>
+                <span>Additional Report Refinements</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div>
+                  <label for="exportStatusSelect" class="form-field-label">Status Filter:</label>
+                  <select id="exportStatusSelect" class="form-select" style="width: 100%; padding: 9px 12px; font-size: 0.84rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #ffffff;">
+                    <option value="all">All Statuses</option>
+                    <option value="New">New</option>
+                    <option value="Verified">Verified</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="exportSeveritySelect" class="form-field-label">Severity Filter:</label>
+                  <select id="exportSeveritySelect" class="form-select" style="width: 100%; padding: 9px 12px; font-size: 0.84rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #ffffff;">
+                    <option value="all">All Severities</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Low">Low</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="exportSearchInput" class="form-field-label">Location / Defect Search (Optional):</label>
+                <input type="text" id="exportSearchInput" placeholder="Filter by road, street, or condition..." class="form-control" style="width: 100%; padding: 8px 12px; font-size: 0.84rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #ffffff;" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Live Match Summary Card -->
+          <div class="export-summary-banner" id="exportSummaryBox">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="exportSummaryIcon" style="font-size: 1.35rem;">✅</span>
+                <div>
+                  <strong id="exportCountHeadline" style="font-size: 1.05rem; color: #166534;">
+                    Checking matching reports...
+                  </strong>
+                  <div id="exportSubtext" style="font-size: 0.8rem; color: #15803d; margin-top: 2px;">
+                    Loading report metadata from database...
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="exportRangeBadge" class="badge" style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 0.8rem; font-weight: 700; padding: 4px 10px;">
+                  All Dates
+                </span>
+              </div>
+            </div>
+
+            <!-- Filename preview -->
+            <div style="font-size: 0.74rem; color: #4b5563; margin-top: 10px; font-family: monospace; background: rgba(255,255,255,0.7); padding: 6px 12px; border-radius: 6px; border: 1px dashed #cbd5e1;">
+              Generated File: <strong id="exportFilenamePreview">Mysuru_RoadWatch_Reports_All_Dates.csv</strong>
+            </div>
+          </div>
+
+          <!-- Export Action Buttons -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <a href="authority.html?from=export" class="btn btn-outline" id="cancelBtn">
+              <span>←</span> Cancel & Back to Dashboard
+            </a>
+
+            <button type="button" class="btn btn-primary btn-lg" id="startExportBtn" style="min-width: 260px; font-weight: 700;">
+              <span>📥</span> Export & Download CSV (<span id="exportBtnCount">0</span> Reports)
+            </button>
+          </div>
+        </section>
+
+        <!-- Preview Table Card -->
+        <section class="table-card">
+          <div class="card-header" style="padding: 16px 20px; margin-bottom: 0;">
+            <div>
+              <h3 class="card-title">Reports Matching Export Filter</h3>
+              <p class="card-subtitle" id="previewTableCount">Showing records that will be downloaded into the CSV file</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="reports-table">
+              <thead>
+                <tr>
+                  <th>Report ID</th>
+                  <th>Road Condition</th>
+                  <th>Severity</th>
+                  <th>Location</th>
+                  <th>Submission Date & Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="exportPreviewTableBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js?v=3.4"></script>
+    <script src="js/main.js?v=3.4"></script>
+    <script src="js/export.js?v=1.0"></script>
+  </body>
+</html>
+

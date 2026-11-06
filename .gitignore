@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+
+# Secrets
+.env
+serviceAccountKey.json
+
+# Cache & runs
+runs/
+*.pt.cache
+
+# Runtime uploads and annotated images
+mysuru-roadwatch/data/images/uploads/*
+mysuru-roadwatch/data/images/annotated/*
+data/images/uploads/*
+data/images/annotated/*
+!**/uploads/.gitkeep
+!**/annotated/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
